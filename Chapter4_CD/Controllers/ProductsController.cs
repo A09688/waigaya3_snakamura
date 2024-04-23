@@ -78,7 +78,8 @@ namespace Waigaya3.Controllers
                 product.CategoryId = request.CategoryId;
             }
             _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return Ok();
         }
 
         /// <summary>

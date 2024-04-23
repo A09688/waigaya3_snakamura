@@ -45,7 +45,7 @@
         <!-- ボタン -->
         <div class="row">
             <div class="col-auto mb-4">
-                <button type="submit" class="btn btn-primary" asp-action="Upsert">保存</button>
+                <button id="btnSave" type="button" class="btn btn-primary">保存</button>
             </div>
             <div class="col-auto mb-4">
                 <button type="button" class="btn btn-secondary" onclick="history.back();">取消</button>
@@ -60,8 +60,22 @@
     </div>
 </form>
 
+
 @section Scripts {
     <script>
+        $('#btnSave').on('click', function () {
+            const formData = $('form').serialize();
+            $.ajax({
+                type: 'post',
+                url: '/products/upsert',
+                data: formData,
+            }).done(function (data) {
+                bootbox.alert("保存しました？");
+            }).fail(function (data) {
+                bootbox.alert("失敗しました？");
+            });
+        });
+
         function checkDelete() {
             return confirm('削除しますか？');
         }
