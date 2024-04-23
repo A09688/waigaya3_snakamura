@@ -53,9 +53,15 @@
             @if (Model.Product?.Id != null)
             {
                 <div class="col-auto mb-4">
-                    <button type="submit" class="btn btn-danger" asp-action="Delete">削除</button>
+                    <button type="submit" class="btn btn-danger" asp-action="Delete" onclick="return chk()">削除</button>
                 </div>
             }
         </div>
     </div>
 </form>
+
+<script type="text/javascript">
+    function chk() {
+        return confirm("削除しますか?");
+    }
+</script>
