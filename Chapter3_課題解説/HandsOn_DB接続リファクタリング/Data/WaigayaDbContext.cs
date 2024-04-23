@@ -6,6 +6,14 @@ namespace Waigaya3.Data
 {
     public class WaigayaDbContext : DbContext
     {
+        private readonly IConfiguration configuration;
+
+
+        public WaigayaDbContext(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         // DBSet
         public DbSet<Category> Categories { get; set; } = default!;
         public DbSet<Product> Products { get; set; } = default!;
@@ -13,23 +21,9 @@ namespace Waigaya3.Data
         //接続情報
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var builer = new SqlConnectionStringBuilder();
-            builer.DataSource = @"(localdb)\MSSQLLocalDB";
-            // localDBを新規で作り直したいときは…
-            // InitialCatalogをWaigaya●等に変更する
-            builer.InitialCatalog = "WaigayaDB1";
-            builer.IntegratedSecurity = true;
+            string? connectionString = configuration.GetConnectionString("WaigayaDB");
+            
 
-            string azureConnecitonString = "Server=tcp:{自分のSQLServiceを入れてね},1433;Initial Catalog=waigayadb;Persist Security Info=False;User ID=dbadmin;Password=Pacific123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-
-            /*
-             * LogTo( Action<string> でコンソールにSQLのログを出力する
-             * 不要なログが多いので、Log出力のカテゴリーを指定: DbLoggerCategory.Database.Command.Name
-             * LogLevelはInfomationに設定
-             */
-            bool isProduction = false;  // trueならAzure, falseならlocaldb
-            string connectionString = isProduction ? 
-                azureConnecitonString : builer.ConnectionString;
             optionsBuilder.UseSqlServer(connectionString)
               .LogTo(message =>
               System.Diagnostics.Debug.WriteLine(message),
